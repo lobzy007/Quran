@@ -89,7 +89,7 @@ const Surah = () => {
 
   return (
     <div className="flex max-md:flex-col-reverse max-md:w-full">
-      <div className="flex w-full overflow-y-scroll h-[70.5vh]">
+      <div className="flex w-full overflow-y-scroll h-[88.5vh] max-md:h-[70.5vh]">
         <div className="font-mono font-extrabold text-xl w-full flex flex-col gap-6 m-4 max-[500px]:m-[4px]">
           {data.data.data.ayahs?.map((a, i) => (
             <div
