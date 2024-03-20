@@ -29,7 +29,7 @@ const SurahList = () => {
 
   return (
     <div className="flex mt-4 ml-4 mr-4">
-      <div className="flex flex-col font-mono font-extrabold gap-1 text-l text-left overflow-y-scroll h-[88.5vh] w-[400px] max-md:hidden">
+      <div className="flex flex-col font-mono font-extrabold gap-1 text-l text-left overflow-y-scroll h-[88.5vh] w-[100%] max-md:hidden">
         {data.data.data?.map((s) => (
           <NavLink
             to={`/surah/${s.number}`}
