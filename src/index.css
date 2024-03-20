@@ -6,6 +6,10 @@
   border: 2px solid slateblue;
 }
 
+.timeToPray {
+  background: rgb(100, 116, 139);
+}
+
 ::-webkit-scrollbar {
   width: 5px;
 }

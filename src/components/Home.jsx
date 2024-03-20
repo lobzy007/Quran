@@ -18,7 +18,7 @@ const Home = () => {
   console.log(data.data.data);
 
   return (
-    <div className="grid p-2 grid-cols-3 gap-4 font-mono font-extrabold text-xl m-6">
+    <div className="grid p-2 grid-cols-3 gap-4 font-mono font-extrabold text-xl m-6 max-md:grid-cols-1">
       {data.data.data?.map((s) => (
         <Link
           to={`/surah/${s.number}`}

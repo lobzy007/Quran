@@ -24,7 +24,6 @@ const Surah = () => {
   const [transDataUz, setTransDataUz] = useState(null);
   const [transDataEn, setTransDataEn] = useState(null);
   const [transDataRu, setTransDataRu] = useState(null);
-  const [audio, setAudio] = useState(null);
   const [transData, setTransData] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [lang, setLang] = useState(null);
@@ -34,6 +33,15 @@ const Surah = () => {
     "surah",
     () => {
       return axios.get(`https://api.alquran.cloud/v1/surah/${number}`);
+    }
+  );
+
+  const { isLoading: audioLoading, data: audio } = useQuery(
+    "audioSurah",
+    () => {
+      return axios.get(
+        `https://api.alquran.cloud/v1/surah/${number}/ar.alafasy`
+      );
     }
   );
 
@@ -65,7 +73,7 @@ const Surah = () => {
     }
   }, [transData, transDataEn, transDataRu, transDataUz]);
 
-  if (isLoading || isFetching || !transData) {
+  if (isLoading || isFetching || audioLoading || !transData) {
     return <h1>Loading...</h1>;
   }
 
@@ -80,9 +88,9 @@ const Surah = () => {
   //   }
 
   return (
-    <>
-      <div className="flex w-full overflow-y-scroll h-[88.5vh]">
-        <div className="font-mono font-extrabold text-xl w-full flex flex-col gap-6 m-4">
+    <div className="flex max-md:flex-col-reverse max-md:w-full">
+      <div className="flex w-full overflow-y-scroll h-[70.5vh]">
+        <div className="font-mono font-extrabold text-xl w-full flex flex-col gap-6 m-4 max-[500px]:m-[4px]">
           {data.data.data.ayahs?.map((a, i) => (
             <div
               className="flex flex-col justify-between gap-6 items-start p-8 bg-slate-100 rounded-2xl"
@@ -98,12 +106,12 @@ const Surah = () => {
               <div className="trans font-medium text-lg font-sans">
                 {transData.ayahs[i].text}
               </div>
-              <audio src={audio} controls />
+              <audio src={audio.data.data.ayahs[i].audio} controls />
             </div>
           ))}
         </div>
       </div>
-      <div className="changeLang mx-10 mt-2 flex flex-col items-center justify-start gap-6">
+      <div className="changeLang mx-10 mt-2 flex flex-col items-center justify-start gap-6 ">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -176,7 +184,7 @@ const Surah = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </>
+    </div>
   );
 };
 
