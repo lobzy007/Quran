@@ -12,7 +12,11 @@ const Home = () => {
   const { isLoading, data, isFetching, isError } = useQuery("surah", fetchData);
 
   if (isLoading || isFetching) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="w-full h-[90vh] flex justify-center items-center">
+        <div className="spinner"></div>
+      </div>
+    );
   }
 
   console.log(data.data.data);

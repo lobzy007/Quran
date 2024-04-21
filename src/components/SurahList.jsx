@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import Surah from "./Surah";
 import { ContextUI } from "./UpdateUI";
+import Player from "./AudioPlayer";
 
 const SurahList = () => {
   const { isLoading, data, isFetching, isError, refetch } = useQuery(
@@ -24,12 +25,16 @@ const SurahList = () => {
   const navigate = useNavigate();
 
   if (isLoading || isFetching) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="w-full h-[90vh] flex justify-center items-center">
+        <div className="spinner"></div>
+      </div>
+    );
   }
 
   return (
     <div className="flex mt-4 ml-4 mr-4">
-      <div className="flex flex-col font-mono font-extrabold gap-1 text-l text-left overflow-y-scroll h-[88.5vh] w-[100%] max-md:hidden">
+      <div className="flex flex-col font-mono font-extrabold gap-1 text-l text-left overflow-y-scroll h-[88.5vh] w-[400px] max-md:hidden">
         {data.data.data?.map((s) => (
           <NavLink
             to={`/surah/${s.number}`}
@@ -53,6 +58,7 @@ const SurahList = () => {
         {/* <Surah numberState={state} /> */}
       </div>
       <Outlet />
+      
     </div>
   );
 };

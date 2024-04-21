@@ -4,7 +4,10 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import Home from "./Home";
 import SurahList from "./SurahList";
-
+import AudioPlayer from "react-h5-audio-player";
+import ReactAudioPlayer from "react-audio-player";
+import "react-h5-audio-player/lib/styles.css";
+import audioBtn from "./img/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTEwL2pvYjEzMzgtZWxlbWVudC0zNi1wLnBuZw.webp";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ContextUI } from "./UpdateUI";
+import Player from "./AudioPlayer";
 
 const Surah = () => {
   const { number } = useParams();
@@ -28,6 +32,9 @@ const Surah = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [lang, setLang] = useState(null);
   const [author, setAuthor] = useState("ar.alafasy");
+  // const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState("none");
+  const [audioPlayer, setAudioPlayer] = useState(false);
 
   const { isLoading, data, isFetching, isError, refetch } = useQuery(
     "surah",
@@ -73,9 +80,25 @@ const Surah = () => {
     }
   }, [transData, transDataEn, transDataRu, transDataUz]);
 
+  // const audioPlaying = (i) => {
+  //   setIsPlaying(i);
+  // };
+
+  // const [isPlaying, setIsPlaying] = useState(
+  //   Array(audio.data.data.ayahs.length).fill(false)
+  // );
+
+  // console.log(audioPlayer);
+
   if (isLoading || isFetching || audioLoading || !transData) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="w-full h-[90vh] flex justify-center items-center">
+        <div className="spinner"></div>
+      </div>
+    );
   }
+
+  console.log(isPlaying);
 
   //   function condition() {
   //     if (lang == "uz") {
@@ -88,8 +111,8 @@ const Surah = () => {
   //   }
 
   return (
-    <div className="flex max-md:flex-col-reverse max-md:w-full">
-      <div className="flex w-full overflow-y-scroll h-[88.5vh] max-md:h-[70.5vh]">
+    <div className="flex w-full max-md:flex-col-reverse max-md:w-full">
+      <div className="flex w-full overflow-y-scroll h-[88.5vh] max-md:h-[75.5vh]">
         <div className="font-mono font-extrabold text-xl w-full flex flex-col gap-6 m-4 max-[500px]:m-[4px]">
           {data.data.data.ayahs?.map((a, i) => (
             <div
@@ -106,7 +129,50 @@ const Surah = () => {
               <div className="trans font-medium text-lg font-sans">
                 {transData.ayahs[i].text}
               </div>
-              <audio src={audio.data.data.ayahs[i].audio} controls />
+              {/* <ReactAudioPlayer src={audio.data.data.ayahs[i].audio} controls /> */}
+              {audio &&
+                audio.data &&
+                audio.data.data &&
+                audio.data.data.ayahs && (
+                  <button
+                    onClick={() => {
+                      setAudioPlayer(true);
+                      setIsPlaying(i);
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className={`w-6 h-6 ${
+                        isPlaying === i ? "text-slate-700" : "text-slate-400"
+                      }`}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"
+                      />
+                    </svg>
+                  </button>
+                )}
+              {/* <AudioPlayer
+                src={audio.data.data.ayahs[i].audio}
+                // autoPlay={isPlaying[i]}
+                showJumpControls={"false"}
+                onEnded={handleAudioEnded}
+                onPlay={() => handlePlayAudio(i)}
+                // onEnded={}
+                // other props here
+              /> */}
+              {/* <audio src={audio.data.data.ayahs[i].audio} controls /> */}
             </div>
           ))}
         </div>
@@ -156,7 +222,7 @@ const Surah = () => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
@@ -182,7 +248,37 @@ const Surah = () => {
               </DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
+      </div>
+      {/* <Player
+        src={`${
+          isPlaying !== "none"
+            ? `${audio.data.data.ayahs[isPlaying].audio}`
+            : " "
+        }`}
+        isPlaying={isPlaying}
+        number={number}
+        hiddenOrNot={`${isPlaying >= 0 ? " " : "hidden"}`}
+      /> */}
+      <div
+        className={`w-[90%] h-[100px] align-bottom fixed bottom-0 left-0 right-1 m-auto p-0 ${
+          isPlaying >= 0 ? " " : "hidden"
+        }`}
+      >
+        <AudioPlayer
+          src={`${
+            isPlaying !== "none"
+              ? `${audio.data.data.ayahs[isPlaying].audio}`
+              : " "
+          }`}
+          // autoPlay={isPlaying[i]}
+          autoPlay
+          className={`rounded-2xl border-slate-600 border-4 text-slate-700 bg-slate-300 `}
+          // showJumpControls={"false"}
+          controls
+          onEnded={() => setIsPlaying(isPlaying + 1)}
+          // other props here
+        />
       </div>
     </div>
   );

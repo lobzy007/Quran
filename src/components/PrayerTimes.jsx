@@ -20,7 +20,11 @@ const PrayerTimes = () => {
   }, [timePray]);
 
   if (!timePray) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="w-full h-[90vh] flex justify-center items-center">
+        <div className="spinner"></div>
+      </div>
+    );
   }
   const hufton = timePray.times.hufton;
   const splitTime = time.split(":").join("");
@@ -30,7 +34,6 @@ const PrayerTimes = () => {
     const h1 = t1.split(":").join("");
     const h2 = t2.split(":").join("");
     const h3 = t3.split(":").join("");
-    console.log(h1);
     if (h3 > h1 && h3 < h2) {
       return "timeToPray";
     } else {
@@ -87,7 +90,7 @@ const PrayerTimes = () => {
         </div>
         <div
           className={`bomdod px-10 py-8 border-2 border-slate-500 bg-slate-300 flex justify-center items-center rounded-2xl ${
-            hufton > splitTime || hufton > bomdod ? "timeToPray" : ""
+            hufton > splitTime && hufton < bomdod ? "timeToPray" : ""
           }`}
         >
           Isha: {timePray.times.hufton}
